@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Details index{% endblock %}
+
+{% block body %}
+    <h1>Details index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Quantite</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>Actif</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for detail in details %}
+            <tr>
+                <td>{{ detail.id }}</td>
+                <td>{{ detail.quantite }}</td>
+                <td>{{ detail.createdAt ? detail.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ detail.updatedAt ? detail.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ detail.actif ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_details_show', {'id': detail.id}) }}">show</a>
+                    <a href="{{ path('app_details_edit', {'id': detail.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_details_new') }}">Create new</a>
+{% endblock %}

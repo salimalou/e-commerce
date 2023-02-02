@@ -1,0 +1,5 @@
+<div class="form-widget">
+	{% for image in field.value %}
+		<img src="{{ asset(image_path ~ image.name) }}" width="100"/><br/>
+	{% endfor %}
+</div>
