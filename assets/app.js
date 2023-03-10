@@ -16,3 +16,56 @@ const $ = require("jquery");
 global.$ = global.jQuery = $;
 
 require("bootstrap");
+
+window.addEventListener("load", () => {
+  $(() => {
+    $("a.ajax").on("click", (evtClick) => {
+      evtClick.preventDefault();
+      var href = evtClick.target.getAttribute("href");
+      console.log(href);
+      $.ajax({
+        url: href,
+        dataType: "json",
+        success: (data) => {
+          $("#nombre").html(data);
+          console.log(data);
+        },
+        error: (jqXHR, status, error) => {
+          console.log("ERREUR AJAX", status, error);
+        },
+      });
+    });
+    window.addEventListener("load", () => {
+      $("#form{{ produit.id}}").on("submit", (evtSubmit) => {
+        evtSubmit.preventDefault();
+        $.ajax({
+          url: "{{ path('app_panier_ajouter', {id: produit.id}) }}",
+          data: "qte=" + $("#form{{ produit.id}} [name='qte']").val(),
+          dataType: "json",
+          success: (data) => {
+            $("#nombre").html(data);
+            console.log("nb produits dans le panier = " + data);
+          },
+          error: (jqXHR, status, error) => {
+            console.log("ERREUR AJAX", status, error);
+          },
+        });
+      });
+    });
+
+    $("#formSearch").on("submit", (evtSubmit) => {
+      evtSubmit.preventDefault();
+      $.ajax({
+        url: evtSubmit.target.getAttribute("action"),
+        data: "search=" + $("#formSearch #search").val(),
+        dataType: "html",
+        success: (data) => {
+          $("#main").html(data);
+        },
+        error: (jqXHR, status, error) => {
+          console.log("ERREUR AJAX", status, error);
+        },
+      });
+    });
+  });
+});

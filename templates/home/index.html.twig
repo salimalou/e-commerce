@@ -4,49 +4,26 @@
 
 {% block body %}
 
-{# <nav class="navbar bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand">Pandora</a>
-    <form class="d-flex" role="search">
-      <input class="form-control me-2" type="search" placeholder="rechercher" aria-label="Search">
-      
-    </form>
-  </div>
-</nav> #}
-
-<div class="row">
-<div class="col-lg-6 navbar-header brand">
-
-
-{% for produit in tout_les_produit %}
-<tr>
-    <td></td>
-    <td></td>
-    <td>{{ produit.stock }}</td>
-    <td>{{ produit.prix }}</td>
-    <td>{{ produit.actif ? 'Yes' : 'No' }}</td>
-    <td>{{ produit.createdAt ? produit.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-    <td>{{ produit.updateAt ? produit.updateAt|date('Y-m-d H:i:s') : '' }}</td>
-    <td>
-        <a href="{{ path('app_produit_show', {'id': produit.id}) }}">show</a>
-    </td>
-</tr>
 <div class="row row-cols-1 row-cols-md-3 g-4">
-  <div class="col">
-    <div class="card">
-    {% for photo in tout_les_photo %}
-      <img src="" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">{{ produit.titre }}</h5>
-    <p class="card-text">{{ produit.description|striptags  }} </p>
+{% for produit in tout_les_produit %}
+    <div class="col">
+        <div class="card">
+            <img src="{{ asset(image_path ~ produit.photos|first) }}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{ produit.titre[0:30] }} ...</h5>
+                <p class="card-text">{{ produit.description[0:20]|striptags  }} ...</p>
+                <p>{{ produit.stock }}</p>
+                <p>{{ produit.prix }}</p>
+                <div>
+                    <a href="{{ path('app_produit_show', {'id': produit.id}) }}">Voir le détail</a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>  
-</div>
+ 
 {% else %}
-<tr>
-    <td colspan="8">no records found</td>
-</tr>
-{% endfor %}
-{% endfor %}
+<p>no records found</p>
 
+{% endfor %}
+</div> 
 {% endblock %}

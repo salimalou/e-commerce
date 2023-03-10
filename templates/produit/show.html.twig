@@ -8,8 +8,8 @@
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ produit.id }}</td>
+                {# <th>Id</th> #}
+                {# <td>{{ produit.id }}</td> #}
             </tr>
             <tr>
                 <th>Description</th>
@@ -50,10 +50,10 @@
             </tr>
         </tbody>
     </table>
-
-    <a href="{{ path('app_produit_index') }}">back to list</a>
-
-    <a href="{{ path('app_produit_edit', {'id': produit.id}) }}">edit</a>
-
-    {{ include('produit/_delete_form.html.twig') }}
+    <form method="get" action="{{ path('app_panier_ajouter', {id: produit.id}) }}" id="form{{ produit.id }}">
+        <input name="qte" type="number" value="1">
+        <button class="btn btn-warning">
+            <i class="fa fa-cart-arrow-down"></i>
+        </button>
+    </form>
 {% endblock %}
