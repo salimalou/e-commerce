@@ -16,7 +16,7 @@ class Adresse{
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Colum(length:180)]
+    #[ORM\Column(length:180)]
     private ?string $rue = null;
 
     #[ORM\Column(type:'integer')]
@@ -28,7 +28,7 @@ class Adresse{
     #[ORM\Column(length:180)]
     private ?string $ville = null;
 
-    #[ORM\Colum(length:180)]
+    #[ORM\Column(length:180)]
     private ?string $type = null;
 
     #[ORM\ManyToOne(targetEntity:User::class, inversedBy:"adresses")]
@@ -87,7 +87,7 @@ class Adresse{
         return $this->user;
     }
     
-    public function setUser(User $user): self
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 

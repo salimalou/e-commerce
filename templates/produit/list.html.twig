@@ -1,0 +1,16 @@
+<div class="col">
+	<div class="card">
+		<img src="{{ asset(image_path ~ produit.photos|first) }}" class="card-img-top" alt="...">
+		<div class="card-body">
+			<h5 class="card-title">{{ produit.titre[0:30] }}
+				...</h5>
+			<p class="card-text">{{ produit.description[0:20]|striptags  }}
+				...</p>
+			<p>{{ produit.stock }}</p>
+			<p>{{ produit.prix }}</p>
+			<div>
+				<a href="{{ path('app_produit_show', {'id': produit.id}) }}">Voir le détail</a>
+			</div>
+		</div>
+	</div>
+</div>

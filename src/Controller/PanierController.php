@@ -2,11 +2,12 @@
 
 namespace App\Controller;
 
-use DateTime;
-use App\Entity\Detail;
 use App\Entity\Produit;
 use App\Entity\Commande;
+use App\Entity\Details;
+use App\Entity\Statut;
 use App\Repository\ProduitRepository;
+use App\Repository\StatutRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +38,7 @@ class PanierController extends AbstractController
      */
     public function ajouter($id, ProduitRepository $pr, Session $session, Request $rq)
     {
-        /**
+        /*
          L'objet de la classe Request contient toutes les valeurs des superglobales de PHP. Pour chaque superglobales, il y a une propriété de $rq qui
          correspond : 
             $rq->query     <=>     $_GET
@@ -108,17 +109,17 @@ class PanierController extends AbstractController
 
     /** 
      * @Route("/valider", name="app_panier_valider")
-     * @IsGranted("ROLE_CLIENT")
+     * @IsGranted("ROLE_USER")
      */
 
-    public function valider(Session $session, ProduitRepository $produitRepository, EntityManagerInterface $em)
+    public function valider(Session $session, ProduitRepository $produitRepository, EntityManagerInterface $em, StatutRepository $sr)
     {
         $panier = $session->get("panier", []);
         if ($panier) {
-            $cmd = new Commande;
-            $cmd->setDateEnregistrement(new DateTime());
-            $cmd->setEtat("en Attente");
-            $cmd->setClient($this->getUser()); // affecte l'utilisateur connecté a la propriété 'client' de l'objet $cmd
+            $cmd = new Commande;            
+            $statut = new Statut;           
+            $cmd->setUser($this->getUser()); // affecte l'utilisateur connecté a la propriété 'client' de l'objet $cmd
+            $cmd->setStatut($sr->findOneBy(['position' => 'En Attente']));
             $montant = 0;
             foreach ($panier as $ligne) {
                 /*  On recupere le produit en BDD plutot que d'utiliser l'objet produit enregistré en session, sinon il y a un bug
@@ -127,8 +128,7 @@ class PanierController extends AbstractController
                 $produit = $produitRepository->find($ligne["produit"]->getId());
                 $montant += $produit->getPrix() * $ligne["quantite"];
 
-                $detail = new Detail;
-                $detail->setPrix($produit->getPrix());
+                $detail = new Details;
                 $detail->setQuantite($ligne["quantite"]);
                 $detail->setProduit($produit);
                 $detail->setCommande($cmd);
@@ -136,7 +136,7 @@ class PanierController extends AbstractController
 
                 $produit->setStock($produit->getStock() - $ligne["quantite"]);
             }
-            $cmd->setMontant($montant);
+            
             $em->persist($cmd);
             $em->flush(); // Toutes les requetes en attente sont executées
             $session->remove("panier");

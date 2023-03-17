@@ -36,9 +36,7 @@ class Statut
         $this->commandes = new ArrayCollection();
          $this->createdAt = new \DateTime();
 
-    }
-
-   
+    }   
 
     public function getId(): ?int
     {

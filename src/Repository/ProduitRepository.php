@@ -39,6 +39,24 @@ class ProduitRepository extends ServiceEntityRepository
         }
     }
 
+
+    /**
+     * @return Produit[] Returns an array of Produit objects
+        SELECT p.*
+        FROM produit p
+        WHERE p.titre LIKE '%les%'
+     */
+
+    public function recherche($value): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.titre LIKE :val')
+            ->setParameter('val', "%$value%")
+            ->orderBy('p.titre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Produit[] Returns an array of Produit objects
 //     */
